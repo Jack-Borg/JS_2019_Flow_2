@@ -117,7 +117,7 @@ The main heart of Node JS Processing model is “Event Loop”. If we understand
 If you start your server with [`forever`](https://github.com/nodejitsu/forever), you can use:
 
 ```js
-process.on('uncaughtException', function(err) {
+process.on("uncaughtException", function(err) {
 	console.log(err); //Send some notification about the error
 	process.exit(1);
 });
@@ -143,9 +143,9 @@ A single instance of Node.js runs in a single thread. To take advantage of multi
 The cluster module allows easy creation of child processes that all share server ports.
 
 ```js
-const cluster = require('cluster');
-const http = require('http');
-const numCPUs = require('os').cpus().length;
+const cluster = require("cluster");
+const http = require("http");
+const numCPUs = require("os").cpus().length;
 
 if (cluster.isMaster) {
 	console.log(`Master ${process.pid} is running`);
@@ -155,7 +155,7 @@ if (cluster.isMaster) {
 		cluster.fork();
 	}
 
-	cluster.on('exit', (worker, code, signal) => {
+	cluster.on("exit", (worker, code, signal) => {
 		console.log(`worker ${worker.process.pid} died`);
 	});
 } else {
@@ -163,7 +163,7 @@ if (cluster.isMaster) {
 	// In this case it is an HTTP server
 	http.createServer((req, res) => {
 		res.writeHead(200);
-		res.end('hello world\n');
+		res.end("hello world\n");
 	}).listen(8000);
 
 	console.log(`Worker ${process.pid} started`);
@@ -209,7 +209,7 @@ Logging using Winston:
 
 ```js
 const app = express();
-const winston = require('winston');
+const winston = require("winston");
 const consoleTransport = new winston.transports.Console();
 const myWinstonOptions = {
 	transports: [consoleTransport]
@@ -234,9 +234,9 @@ app.use(logError);
 The debug module has a great namespace feature that allows you to enable or disable debug functions in groups. It is very simple–you separate namespaces by colons, like this:
 
 ```js
-debug('app:meta')('config loaded');
-debug('app:database')('querying db...');
-debug('app:database')('got results!', results);
+debug("app:meta")("config loaded");
+debug("app:database")("querying db...");
+debug("app:database")("got results!", results);
 ```
 
 Enable debug functions in Node by passing the process name via the DEBUG environment variable. The following would enable the database debug function but not meta:
@@ -269,26 +269,26 @@ debug('myapp:thirdparty:twitter:auth')('success!');
 We can test our code with `mocha`, and use `chai`'s `expect` to make our tests more readable.
 
 ```js
-const expect = require('chai').expect;
-describe('Calculator API', function() {
-	describe('Testing the basic Calc API', function() {
-		it('9 / 3 should return 7', function() {
+const expect = require("chai").expect;
+describe("Calculator API", function() {
+	describe("Testing the basic Calc API", function() {
+		it("9 / 3 should return 7", function() {
 			expect(calc.divide(9, 3)).to.be.equal(3);
 		});
-		it('4 / 0 should throw error', function() {
+		it("4 / 0 should throw error", function() {
 			expect(() => calc.divide(4, 0)).to.throw(/Attempt to divide by zero/);
 		});
 	});
-	describe('Testing the REST Calc API', function() {
+	describe("Testing the REST Calc API", function() {
 		before(function(done) {
 			calc.calcServer(PORT, function(s) {
 				server = s;
 				done();
 			});
 		});
-		it('4 + 3 should return 7', async function() {
-			const res = await fetch(URL + 'add/4/3').then(r => r.text());
-			expect(res).to.be.equal('7');
+		it("4 + 3 should return 7", async function() {
+			const res = await fetch(URL + "add/4/3").then(r => r.text());
+			expect(res).to.be.equal("7");
 		});
 		after(function() {
 			server.close();
@@ -307,7 +307,7 @@ A middleware with no mount path will be executed every time the app recieves a r
 var app = express();
 
 app.use(function(req, res, next) {
-	console.log('Time:', Date.now());
+	console.log("Time:", Date.now());
 	next();
 });
 ```
@@ -315,8 +315,8 @@ app.use(function(req, res, next) {
 A middleware function mounted on a path. The function is executed for any type of HTTP request on the path.
 
 ```js
-app.use('/user/:id', function(req, res, next) {
-	console.log('Request Type:', req.method);
+app.use("/user/:id", function(req, res, next) {
+	console.log("Request Type:", req.method);
 	next();
 });
 ```
@@ -324,8 +324,8 @@ app.use('/user/:id', function(req, res, next) {
 A middleware function mounted on a path. The function is executed for HTTP requests with method GET on the path.
 
 ```js
-app.get('/user/:id', function(req, res, next) {
-	console.log('ID:', req.params.id);
+app.get("/user/:id", function(req, res, next) {
+	console.log("ID:", req.params.id);
 	next();
 });
 ```
@@ -335,18 +335,18 @@ Error-handling middleware
 ```js
 app.use(function(err, req, res, next) {
 	console.error(err.stack);
-	res.status(500).send('Something broke!');
+	res.status(500).send("Something broke!");
 });
 ```
 
 ## Explain, using relevant examples, how to implement sessions and the legal implications of doing this
 
 ```js
-var cookieSession = require('cookie-session');
+var cookieSession = require("cookie-session");
 app.use(
 	cookieSession({
-		name: 'session',
-		secret: 'I_should_never_be_visible_in_code',
+		name: "session",
+		secret: "I_should_never_be_visible_in_code",
 
 		// Cookie Options
 		maxAge: 30 * 60 * 1000 // 30 minutes
@@ -388,13 +388,13 @@ EJS tags:
 Setting up route
 
 ```js
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-router.get('/joke', function(req, res, next) {
+router.get("/joke", function(req, res, next) {
 	let counter = req.session.jokeCounter;
 	counter++;
 	req.session.jokeCounter = counter;
-	res.render('randomJoke', { title: 'Joke', joke: jokes.getRandomJoke() });
+	res.render("randomJoke", { title: "Joke", joke: jokes.getRandomJoke() });
 });
 ```
 
@@ -419,42 +419,42 @@ Rendering the site
 Implementing a REST-API with Express
 
 ```js
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-var jokes = require('../model/jokes');
+var jokes = require("../model/jokes");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-	res.render('index', { title: 'Express', userName: req.session.userName });
+router.get("/", function(req, res, next) {
+	res.render("index", { title: "Express", userName: req.session.userName });
 });
 
-router.get('/login', function(req, res, next) {
-	res.render('login', { title: 'Login' });
+router.get("/login", function(req, res, next) {
+	res.render("login", { title: "Login" });
 });
 
-router.post('/login', function(req, res, next) {
-	res.render('index', { title: 'Express' });
+router.post("/login", function(req, res, next) {
+	res.render("index", { title: "Express" });
 });
 
-router.get('/joke', function(req, res, next) {
+router.get("/joke", function(req, res, next) {
 	let counter = req.session.jokeCounter;
 	counter++;
 	req.session.jokeCounter = counter;
-	res.render('randomJoke', { title: 'Joke', joke: jokes.getRandomJoke() });
+	res.render("randomJoke", { title: "Joke", joke: jokes.getRandomJoke() });
 });
 
-router.get('/jokes', function(req, res, next) {
+router.get("/jokes", function(req, res, next) {
 	let counter = req.session.jokesCounter;
 	counter++;
 	req.session.jokesCounter = counter;
-	res.render('allJokes', { title: 'Jokes', jokes: jokes.getAllJokes() });
+	res.render("allJokes", { title: "Jokes", jokes: jokes.getAllJokes() });
 });
 
-router.get('/addjoke', function(req, res, next) {
-	res.render('addJoke', { title: 'Add Joke' });
+router.get("/addjoke", function(req, res, next) {
+	res.render("addJoke", { title: "Add Joke" });
 });
 
-router.post('/storejoke', function(req, res, next) {
+router.post("/storejoke", function(req, res, next) {
 	let counter = req.session.storeJokeCounter;
 	counter++;
 	req.session.storeJokeCounter = counter;
@@ -463,7 +463,7 @@ router.post('/storejoke', function(req, res, next) {
 
 	jokes.addJoke(joke);
 
-	res.render('addJoke', { title: 'Add Joke' });
+	res.render("addJoke", { title: "Add Joke" });
 });
 
 module.exports = router;
@@ -514,27 +514,27 @@ describe("Verify the Joke API", function() {
 We can test our code with Mocha, and we can make the asserts more readable with Chai's expect
 
 ```js
-const expect = require('chai').expect;
-const calc = require('../calc');
-describe('Calculator API', function() {
-	describe('Testing the basic Calc API', function() {
-		it('4 + 3 should return 7', function() {
+const expect = require("chai").expect;
+const calc = require("../calc");
+describe("Calculator API", function() {
+	describe("Testing the basic Calc API", function() {
+		it("4 + 3 should return 7", function() {
 			const res = calc.add(4, 3);
 			expect(res).to.be.equal(7);
 		});
-		it('4 - 3 should return 1', function() {
+		it("4 - 3 should return 1", function() {
 			const res = calc.subtract(4, 3);
 			expect(res).to.be.equal(1);
 		});
-		it('4 * 3 should return 12', function() {
+		it("4 * 3 should return 12", function() {
 			const res = calc.muliply(4, 3);
 			expect(res).to.be.equal(12);
 		});
-		it('9 / 3 should return 7', function() {
+		it("9 / 3 should return 7", function() {
 			const res = calc.divide(9, 3);
 			expect(res).to.be.equal(3);
 		});
-		it('4 / 0 should throw error', function() {
+		it("4 / 0 should throw error", function() {
 			expect(() => calc.divide(4, 0)).to.throw(/Attempt to divide by zero/);
 		});
 	});
@@ -544,13 +544,13 @@ describe('Calculator API', function() {
 Testing asynchronous code
 
 ```js
-const expect = require('chai').expect;
-const calc = require('../calc');
-const fetch = require('node-fetch');
+const expect = require("chai").expect;
+const calc = require("../calc");
+const fetch = require("node-fetch");
 const PORT = 2345;
 const URL = `http://localhost:${PORT}/api/calc/`;
 let server;
-describe('Testing the REST Calc API', function() {
+describe("Testing the REST Calc API", function() {
 	before(function(done) {
 		calc.calcServer(PORT, function(s) {
 			server = s;
@@ -558,9 +558,9 @@ describe('Testing the REST Calc API', function() {
 		});
 	});
 	//testing asynchronous code
-	it('4 + 3 should return 7', async function() {
-		const res = await fetch(URL + 'add/4/3').then(r => r.text());
-		expect(res).to.be.equal('7');
+	it("4 + 3 should return 7", async function() {
+		const res = await fetch(URL + "add/4/3").then(r => r.text());
+		expect(res).to.be.equal("7");
 	});
 	after(function() {
 		server.close();
@@ -570,7 +570,31 @@ describe('Testing the REST Calc API', function() {
 
 ## Explain, using relevant examples, different ways to mock out databases, HTTP-request etc.
 
+We can use `nock` to mock a website
+
+```js
+const nock = require("nock");
+describe("loadWiki()", function() {
+	before(function() {
+		//the website to be mocked
+		nock("https://en.wikipedia.org")
+			//the HTTP method and the path
+			.get("/wiki/Abraham_Lincoln")
+			//the response the mocked website should send
+			.reply(200, "Mock Abraham Lincoln Page");
+	});
+	it("Load Abraham Lincoln's wikipedia page", function(done) {
+		tools.loadWiki({ first: "Abraham", last: "Lincoln" }, function(html) {
+			expect(html).to.equal("Mock Abraham Lincoln Page");
+			done();
+		});
+	});
+});
+```
+
 ## Explain, preferably using an example, how you have deployed your node/Express applications, and which of the Express Production best practices you have followed
+
+I would use nginx, i would disable `console.log` statements, and i would add logging
 
 # NoSQL, MongoDB and Mongoose
 
@@ -594,18 +618,181 @@ Lastly, many NoSQL database technologies have excellent integrated caching capab
 
 ![MySQL & MongoDB pros & cons](https://cdn-images-1.medium.com/max/1600/1*1L4mHDCAfp1IUNePvuT07g.png)
 
+It is very fast to read data as you often avoid have to join tables. But it can also be slower to update because of the database is denormalized.
+
 ## Explain reasons to add a layer like Mongoose, on top on of a schema-less database like MongoDB
 
-## Explain about indexes in MongoDB, how to create them, and demonstrate how you have used them
+Since MongoDB on its own is schemaless, which can cause some troubles, using a layer on top like mongoose makes it possible also to reference documents in other collections inside a document.
 
-## Explain, using your own code examples, how you have used some of MongoDB's "special" indexes like TTL and 2dsphere
+## These two topics will be introduced in period-3
+
+### Explain about indexes in MongoDB, how to create them, and demonstrate how you have used them
+
+Waiting for flow3 to answer this...
+
+### Explain, using your own code examples, how you have used some of MongoDB's "special" indexes like TTL and 2dsphere
+
+Waiting for flow3 to answer this...
 
 ## Demonstrate, using a REST-API you have designed, how to perform all CRUD operations on a MongoDB
 
+```js
+const User = require("../models/user");
+
+async function addUser(user) {
+	return await User.create(user);
+}
+
+async function addJobToUser(userId, job) {
+	return await User.findByIdAndUpdate(
+		userId,
+		{
+			$push: {
+				job
+			}
+		},
+		{ new: true }
+	);
+}
+
+async function getAllUsers() {
+	return await User.find({});
+}
+
+async function findByUserName(userName) {
+	return await User.findOne({
+		userName
+	});
+}
+
+module.exports = {
+	addUser,
+	addJobToUser,
+	getAllUsers,
+	findByUserName
+};
+```
+
 ## Explain the benefits of using Mongoose, and demonstrate, using your own code, an example involving all CRUD operations
+
+Explained earlier
 
 ## Explain the “6 Rules of Thumb: Your Guide Through the Rainbow” as to how and when you would use normalization vs. denormalization
 
+rule 1 Favor embedding unless there is a compelling reason not to.
+
+rule 2 Needing to access an object on its own is a compelling reason not to embed it.
+
+rule 3 Arrays should not grow without bound. If there are more than a couple of hundred documents on the “many” side, don’t embed them; if there are more than a few thousand documents on the “many” side, don’t use an array of ObjectID references. High-cardinality arrays are a compelling reason not to embed.
+
+rule 4 Don’t be afraid of application-level joins: if you index correctly and use the projection specifier (as shown in part 2) then application-level joins are barely more expensive than server-side joins in a relational database.
+
+rule 5 Consider the write/read ratio when denormalizing. A field that will mostly be read and only seldom updated is a good candidate for denormalization: if you denormalize a field that is updated frequently then the extra work of finding and updating all the instances is likely to overwhelm the savings that you get from denormalizing.
+
+rule 6 As always with MongoDB, how you model your data depends – entirely – on your particular application’s data access patterns. You want to structure your data to match the ways that your application queries and updates it.
+
+reference [6 Rules of Thumb](https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-3)
+
 ## Demonstrate, using your own code-samples, decisions you have made regarding → normalization vs denormalization
 
+```js
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+let JobSchema = new Schema({
+	type: String,
+	company: String,
+	companyUrl: String
+});
+
+let UserSchema = new Schema({
+	firstName: String,
+	lastName: String,
+	userName: {
+		type: String,
+		unique: true,
+		required: true
+	},
+	password: {
+		type: String,
+		required: true
+	},
+	email: {
+		type: String,
+		required: true,
+		unique: true
+	},
+	job: [JobSchema],
+	created: {
+		type: Date,
+		default: Date.now
+	},
+	lastUpdated: Date
+});
+```
+
+a user have a one-to-few job. therefore we have embedded the job data into user
+
 ## Explain, using a relevant example, a full JavaScript backend including relevant test cases to test the REST-API (not on the production database)
+
+Explained earlier
+
+the testing of the database could look like this:
+
+```js
+const assert = require("assert");
+const blogFacade = require("../facade/blogFacade");
+const LocationBlog = require("../models/LocationBlog");
+const User = require("../models/User");
+
+const connect = require("../dbConnect");
+connect(require("../settings").TEST_DB_URI);
+
+describe("LocationBlogFacade", function() {
+	var testUser1;
+	var testBlog1;
+
+	beforeEach(async function() {
+		testUser1 = new User({
+			firstName: "Jenne",
+			lastName: "Teste",
+			userName: "jenn",
+			password: "1234",
+			email: "jenn@"
+		});
+		await testUser1.save();
+
+		testBlog1 = new LocationBlog({
+			info: "Very Nice blog i wrote here",
+			pos: { longitude: 22, latitude: 23 },
+			author: testUser1
+		});
+		await testBlog1.save();
+	});
+
+	afterEach(async function() {
+		await User.deleteMany({});
+		await LocationBlog.deleteMany({});
+	});
+
+	it("should should add the locationblog", async function() {
+		const blog = await blogFacade.addLocationBlog(
+			"Nice blog i wrote here",
+			{ longitude: 24, latitude: 23 },
+			testUser1
+		);
+		assert.equal(blog.author, testUser1);
+	});
+
+	it("should add the user to the liked list", async function() {
+		const blog = await blogFacade.likeLocationBlog(testBlog1, testUser1);
+		assert.ok(blog.likedBy[0].equals(testUser1));
+	});
+
+	it("should not be able to have the same user to like twice", async function() {
+		const blog = await blogFacade.likeLocationBlog(testBlog1, testUser1);
+		await blogFacade.likeLocationBlog(blog, testUser1);
+		assert.equal(blog.likedByCount, 1);
+	});
+});
+```
